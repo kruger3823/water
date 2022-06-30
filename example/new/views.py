@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-# .models import registration
+from  watermarker.models import registration
 from .forms import registerform
 from django.core.files.storage import FileSystemStorage
 import cv2
