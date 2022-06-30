@@ -1,6 +1,6 @@
 {% block content %}
 {% load static %}
-<html>
+<html xmlns="http://www.w3.org/1999/html">
 <head>
     <h1 align="center" style="color:rgba(6, 6, 6, 0.769) ;">UPLOAD IMAGE</h1>
 </head>
@@ -14,18 +14,21 @@
 </form>
 
 {% if uploaded %}
-<p style="color:rgb(241, 238, 238);font-size: 25px;">File uploaded at: <a href="{{ uploaded }}">{{ uploaded }}</a></p>
+<p> DOWNLOAD DECRYPTED FILE<a href="{{ uploaded }}">{{ uploaded }}</a></p>
 <html>
 <head>
     <title>Download Files</title>
 </head>
 <body>
     {% for i in context %}
-    <h1>DOWNLOAD THE FILE FROM HERE<a href="media/{{uploaded}}" download>downl</a></h1>
-    <h1>see water mark<a href="index1/">download</a></h1>
+    <p>DOWNLOAD ENCRYPTED<a href="media/{{uploaded}}" download>downl</a></p>
+    <p>see water mark<a href="index1/">download</a></p>
     {% endfor %}
-    <h1>see water mark  <a href="index1/">click here</a></h1>
-    
+    <p>DOWNLOAD ENCRYPTED FILE<a href="index1/">click here</a></p>
+     <div class="form-group m-3">
+                            <label>Upload image1</label>
+                            <input required name="images" type="file" multiple class="form-control-file">
+                        </div>
 </body>
 </html>
 

@@ -12,7 +12,7 @@ from PIL import Image
 from urllib.parse import unquote
 from urllib.request import url2pathname
 
-from django import template
+from django import template, urls
 from django.utils.encoding import smart_str
 from django.utils.timezone import get_default_timezone, is_aware, make_aware
 
@@ -50,6 +50,7 @@ class Watermarker(object):
         """
         # look for the specified watermark by name.  If it's not there, go no
         # further
+
         try:
             watermark = Watermark.objects.get(name__exact=name, is_active=True)
         except Watermark.DoesNotExist:
@@ -138,7 +139,6 @@ class Watermarker(object):
 
         if url_path.startswith(settings.MEDIA_URL):
             url_path = url_path[len(settings.MEDIA_URL):]  # strip media root url
-
         return os.path.normpath(os.path.join(basedir, url2pathname(url_path)))
 
     def generate_filename(self, mark, **kwargs):
@@ -204,13 +204,16 @@ class Watermarker(object):
             logger.debug("Created directory: %s" % os.path.dirname(fpath))
 
         return url_path
+    
+    
 
-    def create_watermark(self, target, mark, fpath, quality=QUALITY, **kwargs):
+    def create_watermark(self, target, mark, fpath, quality=QUALITY,  **kwargs):
         """Create the watermarked image on the filesystem"""
 
         im = utils.watermark(target, mark, **kwargs)
         if not kwargs.get("noalpha", True) is False:
             im = im.convert("RGB")
+
         im.save(fpath, quality=quality)
         return im
 
