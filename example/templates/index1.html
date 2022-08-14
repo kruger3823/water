@@ -3,9 +3,10 @@
   <head></head>
   <body>
     <h2 align="center">DIGITAL WATERMARKING </h2>
-    {% with "/Users/macbook/PycharmProjects/water/example/media" as url_path %}
-      <img src="{{ url_path|watermark:"sample,scale=R78%,tile=1,greyscale=0,position=tr,opacity=20" }}" />
+    {% with uploaded as url_path %}
+      <img src="{{ url_path|watermark:"sample,scale=R78%,tile=1,greyscale=0,position=tr,opacity=50" }}" /><br>
 
+<p> DOWNLOAD DECRYPTED FILE<a href="{{ uploaded }}">{{ uploaded }}</a></p>
 
     {% endwith %}
 

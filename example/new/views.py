@@ -2,8 +2,8 @@ from django.shortcuts import render,redirect
 from  watermarker.models import registration
 from .forms import registerform
 from django.core.files.storage import FileSystemStorage
-import cv2
-import numpy as np
+#import cv2
+#import numpy as np
 
 # Create your views here.
 def index(request):
@@ -85,10 +85,11 @@ def image(request):
         uploaded = fs.url(filename)
         print('uploaded',myfile.name)
         request.session['image']=myfile.name
-        return render(request, 'image.html', {
+        return render(request, 'index1.html', {
             'uploaded': uploaded
         })
     return render(request,'image.html')
+
 def index1(request):
     if request.method == 'POST' and request.FILES['myfile']:
         myfile = request.FILES['myfile']
@@ -98,6 +99,6 @@ def index1(request):
         print('uploaded',myfile.name)
         request.session['image']=myfile.name
         return render(request, 'index1.html', {
-            'uploadedd': uploaded
+            'uploaded': uploaded
         })
     return render(request,'index1.html')

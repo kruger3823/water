@@ -8,6 +8,7 @@ import cmath
 from PIL import Image
 
 
+
 def applyWatermarkDFT(imageMatrix, watermarkMatrix, alpha):
     shiftedDFT = np.fft.fftshift(np.fft.fft2(imageMatrix))
     watermarkedDFT = shiftedDFT + alpha * watermarkMatrix
@@ -143,24 +144,14 @@ def DWT_SVD(coverImage, watermarkImage):
         for j in range(0, y):
             WD[i, j] = WD[i, j] + 0.01 * WW[i, j]
 
-    # Inverse of SVD
-    cAnew = np.dot(uA, (np.dot(WA, vA)))
-    cHnew = np.dot(uH, (np.dot(WH, vH)))
-    cVnew = np.dot(uV, (np.dot(WV, vA)))
-    cDnew = np.dot(uD, (np.dot(WD, vD)))
 
-    coeff = cAnew, (cHnew, cVnew, cDnew)
-
-    # Inverse DWT to get watermarked image
-    watermarkedImage = pywt.idwt2(coeff, 'haar')
-    cv2.imshow('Watermarked Image', watermarkedImage)
 
 
 
 
 if __name__ == "__main__":
-    coverImage = cv2.imread('/Users/macbook/PycharmProjects/django-watermark/example/media/images/image-watermarking-2.jpeg', 0)
-    watermarkImage = cv2.imread('/Users/macbook/PycharmProjects/django-watermark/example/media/images/image-watermarking-2.jpeg', 0)
+    coverImage = cv2.imread('', 0)
+    watermarkImage = cv2.imread('', 0)
 
 
     val = input('What \type of embedding you want to perform?\n1.DWT\n2.DCT\n3.DFT\n4.SVD\n5.SVD-DWT\n6.SVD-DCT-DWT')
@@ -198,13 +189,52 @@ if __name__ == "__main__":
         pass
 
 
-    def recover_watermark(image_array, model='haar', level=1):
+    def recover_watermark(cipher=None, key=None):
+        for index in range(len(cipher)):
+            if cipher[index].isalpha():
+
+                if cipher[index].isupper():
+                    plain = plain + chr((ord(cipher[index]) - 64 - key) % 26 + 64)
+
+
+                elif cipher[index].islower():
+                    plain = plain + chr((ord(cipher[index]) - 96 - key) % 26 + 96)
+
+            else:
+                plain = plain + cipher[index]
+
+        return plain
+        # Inverse of SVD
+        cAnew = np.dot(uA, (np.dot(WA, vA)))
+        cHnew = np.dot(uH, (np.dot(WH, vH)))
+        cVnew = np.dot(uV, (np.dot(WV, vA)))
+        cDnew = np.dot(uD, (np.dot(WD, vD)))
+
+        coeff = cAnew, (cHnew, cVnew, cDnew)
+
+        # Inverse DWT
+        watermarkedImage = pywt.idwt2(coeff, 'haar')
+        cv2.imshow('Watermarked Image', watermarkedImage)
+
+        in_filename = sys.argv[1]
+        key = int(sys.argv[2])
+        out_filename = sys.argv[3]
+
+        with open(in_filename, "r") as f:
+            encrypted = f.read()
+
+        decrypted = decrypt(encrypted, key)
+
+        with open(out_filename, "w+") as f:
+            f.write(decrypted)
+
         coeffs_watermarked_image = (image_array, model, level)
         dct_watermarked_coeff = apply_dct(coeffs_watermarked_image[0])
 
         watermark_array = get_watermark(dct_watermarked_coeff, 128)
 
         watermark_array = np.uint8(watermark_array)
+
 
         # Save result
         img = Image.fromarray(watermark_array)
